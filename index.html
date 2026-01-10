@@ -28,7 +28,7 @@
         
         .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         .row { display: flex; align-items: center; margin-bottom: 18px; }
-        .row label { width: 140px; font-size: 17px; color: #fff; font-weight: 900; line-height: 1.2; }
+        .row label { width: 140px; font-size: 17px; color: #fff; font-weight: 900; line-height: 1.2; cursor: pointer; }
         .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; width: 100%; box-sizing: border-box; height: 48px; background: #fff; color: #000; outline: none; }
         
         .result-row { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
@@ -45,7 +45,7 @@
         .tool-link-wide { grid-column: span 2; justify-self: center; width: calc(50% - 5px); }
 
         footer { border-top: 1px solid var(--border-color); padding: 30px 15px; text-align: center; font-size: 13px; color: var(--text-muted); width: 100%; box-sizing: border-box; }
-        .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin: 0 auto 20px auto; background: rgba(255, 255, 255, 0.05); text-align: left; max-width: 480px; width: 100%; box-sizing: border-box; line-height: 1.6; }
+        .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin: 0 auto 20px auto; background: rgba(255, 255, 255, 0.05); text-align: left; max-width: 550px; width: 100%; box-sizing: border-box; line-height: 1.6; }
         .footer-btn { background: none; border: none; color: var(--accent-green); text-decoration: underline; cursor: pointer; padding: 10px; font-weight: 900; font-family: inherit; font-size: 13px; min-height: 44px; }
         
         .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow-y: auto; }
@@ -67,11 +67,17 @@
 
 <main class="container">
     <div class="converter-box">
-        <div class="row"><label for="weight" id="lbl-weight">Weight (kg):</label><input type="number" id="weight" class="input-field" value="70" oninput="calculate()"></div>
-        <div class="row"><label for="height" id="lbl-height">Height (cm):</label><input type="number" id="height" class="input-field" value="175" oninput="calculate()"></div>
+        <div class="row">
+            <label for="weight" id="lbl-weight">Weight (kg):</label>
+            <input type="number" id="weight" class="input-field" value="70" oninput="calculate()">
+        </div>
+        <div class="row">
+            <label for="height" id="lbl-height">Height (cm):</label>
+            <input type="number" id="height" class="input-field" value="175" oninput="calculate()">
+        </div>
         
         <div class="row result-row">
-            <label id="lbl-bmi-res" style="color: var(--accent-green);">Your BMI:</label>
+            <label for="bmiValue" id="lbl-bmi-res" style="color: var(--accent-green);">Your BMI:</label>
             <input type="text" id="bmiValue" class="input-field result-field" readonly aria-live="polite">
         </div>
         <div class="bmi-status-box">
@@ -141,27 +147,27 @@
             desc: "Calculadora de IMC profesional: analice su peso e índice de masa corporal al instante para una vida saludable.",
             weight: "Peso (kg):", height: "Altura (cm):", bmiRes: "Tu IMC:",
             other: "Otras herramientas", 
-            footer: "SmartHelper.io es su destino principal para herramientas de salud de alta precisión y análisis de masa corporal. Nuestra calculadora de IMC utiliza la fórmula estándar de la OMS para ayudarle a controlar su condición física con la máxima precisión. Todos sus datos se procesan localmente para garantizar que su información privada permanezca segura en todo momento y en cualquier lugar.",
-            seo: `<h2>¿Por qué revisar su IMC?</h2><p>El índice de masa corporal es un indicador clave utilizado por profesionales para categorizar los riesgos de salud. Mantener un IMC saludable ayuda a tener un estilo de vida equilibrado y activo.</p><h2>La precisión importa</h2><p>Nuestra herramienta ofrece resultados instantáneos basados en su altura y peso con gran precisión. Es la forma perfecta de seguir su progreso físico a lo largo del tiempo de manera profesional.</p>`,
+            footer: "SmartHelper.io es su plataforma líder para herramientas de salud de alta precisión y análisis detallado de la masa corporal. Nuestra calculadora de IMC utiliza la fórmula estándar de la OMS para ayudarle a monitorear su condición física con la mayor precisión posible. Todos sus datos personales se procesan localmente para garantizar que su privacidad y su información médica permanezcan totalmente protegidas en todo momento.",
+            seo: `<h2>¿Por qué revisar su IMC?</h2><p>El índice de masa corporal es un indicador clave utilizado por profesionales para categorizar los riesgos de salud. Mantener un IMC saludable ayuda a tener un estilo de vida equilibrado.</p><h2>La precisión importa</h2><p>Nuestra herramienta ofrece resultados instantáneos basados en su altura y peso con gran precisión. Es la forma perfecta de seguir su progreso físico a lo largo del tiempo.</p>`,
             unit: "Unidades", perc: "Porcentaje", vat: "IVA", loan: "Préstamos", 
             disc: "Descuento", tip: "Propina", cur: "Moneda",
             privacy: "Privacidad", terms: "Términos",
             s1: "Bajo peso", s2: "Normal", s3: "Sobrepeso", s4: "Obesidad",
-            privText: "<h2>Privacidad</h2><p>No guardamos ni rastreamos sus datos de salud. Todos los cálculos se realizan instantáneamente en su propio navegador personal.</p>",
-            termsText: "<h2>Términos</h2><p>El resultado del IMC es solo para fines informativos. Por favor, consulte a un profesional médico calificado para obtener asesoramiento.</p>"
+            privText: "<h2>Privacidad</h2><p>No guardamos sus datos de salud.</p>",
+            termsText: "<h2>Términos</h2><p>El resultado es solo para fines informativos.</p>"
         },
         de: {
             desc: "Professioneller BMI-Rechner - analysieren Sie Ihr Gewicht und Ihren Body-Mass-Index sofort für Ihre Gesundheit.",
             weight: "Gewicht (kg):", height: "Größe (cm):", bmiRes: "Ihr BMI:",
             other: "Andere Elite-Tools", 
-            footer: "SmartHelper.io ist Ihre erste Adresse für hochpräzise Gesundheitswerkzeuge und Körpermasseanalyse. Unser BMI-Rechner verwendet die Standard-WHO-Formel, um Ihnen zu helfen, Ihren körperlichen Zustand mit maximaler Genauigkeit zu überwachen. Alle Daten werden lokal verarbeitet, um sicherzustellen, dass Ihre privaten Informationen jederzeit vollständig geschützt bleiben.",
-            seo: `<h2>Warum den BMI prüfen?</h2><p>Der Body-Mass-Index ist ein wichtiger Indikator, der von Fachleuten zur Einstufung gesundheitlicher Risiken verwendet wird. Monitoring hilft bei der Aufrechterhaltung eines gesunden Lebensstils.</p><h2>Genauigkeit zählt</h2><p>Unser Tool liefert sofortige Ergebnisse basierend auf Ihrer Größe und Ihrem Gewicht mit hoher Präzision. Es ist der perfekte Weg, um Ihren Fitness-Fortschritt über die Zeit professionell zu verfolgen.</p>`,
+            footer: "SmartHelper.io ist Ihr erstklassiges Ziel für hochpräzise Gesundheitsinstrumente und die Analyse der Körpermasse. Unser BMI-Rechner verwendet die offizielle Standardformel der WHO, um Ihnen dabei zu helfen, Ihren körperlichen Zustand mit maximaler Genauigkeit zu überwachen. Alle Ihre Daten werden ausschließlich lokal verarbeitet, um sicherzustellen, dass Ihre privaten Gesundheitsinformationen absolut sicher und vertraulich bleiben.",
+            seo: `<h2>Warum den BMI prüfen?</h2><p>Der Body-Mass-Index ist ein wichtiger Indikator, der von Fachleuten zur Einstufung gesundheitlicher Risiken verwendet wird. Monitoring hilft bei der Aufrechterhaltung eines gesunden Lebensstils.</p><h2>Genauigkeit zählt</h2><p>Unser Tool liefert sofortige Ergebnisse basierend auf Ihrer Größe und Ihrem Gewicht mit hoher Präzision. Es ist der perfekte Weg, um Ihren Fitness-Fortschritt über die Zeit zu verfolgen.</p>`,
             unit: "Konverter", perc: "Prozent", vat: "MwSt", loan: "Kredit", 
             disc: "Rabatt", tip: "Trinkgeld", cur: "Währung",
             privacy: "Datenschutz", terms: "AGB",
             s1: "Untergewicht", s2: "Normalgewicht", s3: "Übergewicht", s4: "Adipositas",
-            privText: "<h2>Datenschutz</h2><p>Wir speichern oder verfolgen Ihre Gesundheitsdaten nicht. Alle Berechnungen werden sofort lokal in Ihrem Webbrowser durchgeführt.</p>",
-            termsText: "<h2>AGB</h2><p>Der BMI-Wert dient nur zur Information. Bitte konsultieren Sie einen qualifizierten Arzt für eine professionelle medizinische Beratung.</p>"
+            privText: "<h2>Datenschutz</h2><p>Ihre Daten bleiben auf Ihrem Gerät.</p>",
+            termsText: "<h2>AGB</h2><p>Der BMI-Wert dient nur zur Information.</p>"
         }
     };
 
