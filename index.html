@@ -3,92 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMI Calculator - SmartHelper</title>
+    <title>BMI Calculator - SmartHelper.io</title>
+    <meta id="meta-desc" name="description" content="Calculate your Body Mass Index (BMI) accurately with SmartHelper. Professional weight analysis for health and fitness.">
     <style>
         :root {
             --bg-dark: #0f172a;
             --card-bg: #1e293b;
-            --accent-green: #22c55e;
+            --accent-green: #4ade80;
             --text-light: #f8fafc;
+            --text-muted: #cbd5e1;
             --border-color: #334155;
-            --border-glow: rgba(255, 255, 255, 0.3);
+            --border-glow: rgba(255, 255, 255, 0.2);
         }
 
-        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; }
-        .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
-        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; color: white; }
-        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; }
-        .container { max-width: 800px; margin: 0 auto; padding: 5px; box-sizing: border-box; min-height: 100vh; }
-        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin: 15px 0 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .row { display: flex; align-items: center; margin-bottom: 18px; }
-        .row label { width: 150px; font-size: 17px; color: #cbd5e1; font-weight: 900; line-height: 1.2; }
-        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; width: 100%; box-sizing: border-box; height: 48px; background: #fff; color: #000; }
-        .result-field { background: #f0fdf4 !important; color: #166534 !important; border-color: #22c55e !important; }
+        body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 0; background-color: var(--bg-dark); color: var(--text-light); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         
-        .bmi-status { text-align: center; margin-top: 15px; font-weight: 900; font-size: 20px; padding: 10px; border-radius: 8px; display: none; }
+        .top-header { background-color: #166534; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); min-height: 48px; }
+        .top-header h1 { margin: 0; font-size: 20px; font-weight: 900; color: white; }
+        
+        .lang-switcher { background: var(--bg-dark); border: 2px solid white; color: white; padding: 4px 8px; border-radius: 8px; font-size: 15px; font-weight: 800; cursor: pointer; outline: none; min-height: 44px; }
+        .lang-switcher option { color: #000; }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 5px; box-sizing: border-box; }
+        
+        .converter-box { border: 1px solid var(--border-color); padding: 30px 20px; background: var(--card-bg); border-radius: 12px; margin: 15px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .row { display: flex; align-items: center; margin-bottom: 18px; }
+        .row label { width: 140px; font-size: 17px; color: #fff; font-weight: 900; line-height: 1.2; }
+        .input-field { flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 18px; font-weight: 800; width: 100%; box-sizing: border-box; height: 48px; background: #fff; color: #000; outline: none; }
+        
+        .result-row { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .result-field { background: #f0fdf4 !important; color: #166534 !important; border-color: var(--accent-green) !important; font-weight: 900; }
+        
+        /* FIX CLS: Reserve space for status */
+        .bmi-status-box { min-height: 50px; text-align: center; margin-top: 15px; }
+        .bmi-status { font-weight: 900; font-size: 22px; padding: 10px; border-radius: 8px; display: none; }
+
+        .seo-content { padding: 15px; line-height: 1.7; font-size: 14px; color: var(--text-muted); }
+        .seo-content h2 { color: var(--accent-green); font-size: 19px; margin: 20px 0 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 900; }
 
         .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .tool-link { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--accent-green); padding: 12px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 13px; font-weight: 800; transition: 0.3s; }
-        .tool-link:hover { background: var(--accent-green); color: white; }
-        .tool-link-wide { grid-column: span 2; }
+        .tool-link { background: rgba(255, 255, 255, 0.05); border: 2px solid var(--accent-green); color: var(--accent-green); padding: 12px 5px; border-radius: 8px; text-decoration: none; text-align: center; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; min-height: 48px; box-sizing: border-box; }
+        .tool-link-wide { grid-column: span 2; justify-self: center; width: calc(50% - 5px); }
 
-        footer { border-top: 1px solid var(--border-color); padding: 25px 15px; text-align: center; font-size: 13px; color: #94a3b8; }
-        .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.05); }
-        .footer-link { color: var(--accent-green); text-decoration: underline; cursor: pointer; padding: 0 8px; font-weight: 900; }
+        footer { border-top: 1px solid var(--border-color); padding: 30px 15px; text-align: center; font-size: 13px; color: var(--text-muted); width: 100%; box-sizing: border-box; }
+        .footer-info-block { border: 2px solid var(--border-glow); border-radius: 12px; padding: 18px; margin: 0 auto 20px auto; background: rgba(255, 255, 255, 0.05); text-align: left; max-width: 480px; width: 100%; box-sizing: border-box; line-height: 1.6; }
+        .footer-btn { background: none; border: none; color: var(--accent-green); text-decoration: underline; cursor: pointer; padding: 10px; font-weight: 900; font-family: inherit; font-size: 13px; min-height: 44px; }
         
-        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; }
-        .modal-content { background: var(--card-bg); margin: 5% auto; padding: 25px; width: 90%; max-width: 600px; border-radius: 12px; position: relative; color: var(--text-light); border: 2px solid var(--border-glow); line-height: 1.6; }
-        .close-btn { position: absolute; right: 10px; top: 0; font-size: 38px; cursor: pointer; padding: 10px; }
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow-y: auto; }
+        .modal-content { background: var(--card-bg); margin: 10% auto; padding: 35px 25px 25px; width: 85%; max-width: 600px; border-radius: 12px; position: relative; border: 2px solid var(--border-glow); color: white; line-height: 1.6; }
+        .close-btn { position: absolute; right: 5px; top: 5px; font-size: 40px; cursor: pointer; padding: 10px 20px; color: var(--text-muted); background: none; border: none; }
     </style>
 </head>
 <body>
 
-<div class="top-header">
+<header class="top-header">
     <h1>SmartHelper.io</h1>
-    <select class="lang-switcher" onchange="changeLang(this.value)" id="langSelect">
+    <select class="lang-switcher" onchange="changeLang(this.value)" id="langSelect" aria-label="Select Language">
         <option value="en">English</option>
         <option value="uk">Українська</option>
         <option value="es">Español</option>
         <option value="de">Deutsch</option>
     </select>
-</div>
+</header>
 
-<div class="container">
+<main class="container">
     <div class="converter-box">
-        <div class="row"><label id="lbl-weight">Weight (kg):</label><input type="number" id="weight" class="input-field" value="70" oninput="calculate()"></div>
-        <div class="row"><label id="lbl-height">Height (cm):</label><input type="number" id="height" class="input-field" value="175" oninput="calculate()"></div>
+        <div class="row"><label for="weight" id="lbl-weight">Weight (kg):</label><input type="number" id="weight" class="input-field" value="70" oninput="calculate()"></div>
+        <div class="row"><label for="height" id="lbl-height">Height (cm):</label><input type="number" id="height" class="input-field" value="175" oninput="calculate()"></div>
         
-        <div class="row" style="margin-top:25px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <div class="row result-row">
             <label id="lbl-bmi-res" style="color: var(--accent-green);">Your BMI:</label>
-            <input type="text" id="bmiValue" class="input-field result-field" readonly>
+            <input type="text" id="bmiValue" class="input-field result-field" readonly aria-live="polite">
         </div>
-        <div id="bmiStatus" class="bmi-status"></div>
+        <div class="bmi-status-box">
+            <div id="bmiStatus" class="bmi-status"></div>
+        </div>
     </div>
 
-    <h3 style="text-align: center; font-size: 14px; color: #64748b; text-transform: uppercase; margin-top: 30px;" id="txt-other">Other Tools</h3>
-    <div class="tools-grid">
-        <a href="#" class="tool-link" id="lnk-unit">Unit Converter</a>
-        <a href="#" class="tool-link" id="lnk-perc">Percentage Calc</a>
-        <a href="#" class="tool-link" id="lnk-vat">VAT Calculator</a>
-        <a href="#" class="tool-link" id="lnk-loan">Loan Calculator</a>
-        <a href="#" class="tool-link" id="lnk-disc">Discount Calc</a>
-        <a href="#" class="tool-link" id="lnk-tip">Tip Calculator</a>
-        <a href="#" class="tool-link tool-link-wide" id="lnk-cur">Currency Converter</a>
-    </div>
-</div>
+    <section class="seo-content" id="seo-box"></section>
+
+    <h3 style="text-align: center; font-size: 13px; color: #94a3b8; text-transform: uppercase; margin-top: 30px; letter-spacing: 1px;" id="txt-other">Other Elite Tools</h3>
+    <nav class="tools-grid">
+        <a href="https://smart-converter.github.io/unit-converter/" class="tool-link" id="lnk-unit">Unit Converter</a>
+        <a href="https://smart-converter.github.io/percentage-calculator/" class="tool-link" id="lnk-perc">Percentage</a>
+        <a href="https://smart-converter.github.io/vat-calculator/" class="tool-link" id="lnk-vat">VAT Calc</a>
+        <a href="https://smart-converter.github.io/loan-calculator/" class="tool-link" id="lnk-loan">Loan Calc</a>
+        <a href="https://smart-converter.github.io/discount-calculator/" class="tool-link" id="lnk-disc">Discount</a>
+        <a href="https://smart-converter.github.io/tip-calculator/" class="tool-link" id="lnk-tip">Tip Calc</a>
+        <a href="https://smart-converter.github.io/currency-converter/" class="tool-link tool-link-wide" id="lnk-cur">Currency Converter</a>
+    </nav>
+</main>
 
 <footer>
     <div class="footer-info-block" id="footer-text"></div>
-    <p>© 2025 SmartHelper.io</p>
-    <div style="margin-top:10px;">
-        <span class="footer-link" onclick="openPol('privacy')" id="link-privacy">Privacy</span>
-        <span class="footer-link" onclick="openPol('terms')" id="link-terms">Terms</span>
-    </div>
+    <p>© 2026 SmartHelper.io - Health Tools</p>
+    <nav>
+        <button class="footer-btn" onclick="openPol('privacy')" id="link-privacy">Privacy</button>
+        <button class="footer-btn" onclick="openPol('terms')" id="link-terms">Terms</button>
+    </nav>
 </footer>
 
 <div id="siteModal" class="modal" onclick="if(event.target == this) closeModal()">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">×</span>
+        <button class="close-btn" onclick="closeModal()">×</button>
         <div id="modalBody"></div>
     </div>
 </div>
@@ -96,44 +113,56 @@
 <script>
     const translations = {
         en: {
+            desc: "Professional BMI Calculator - analyze your weight and body mass index instantly for better health management.",
             weight: "Weight (kg):", height: "Height (cm):", bmiRes: "Your BMI:",
-            other: "Other Tools", footer: "BMI Calculator — check your body mass index easily.",
-            unit: "Unit Converter", perc: "Percentage Calc", vat: "VAT Calculator", loan: "Loan Calculator", 
-            disc: "Discount Calc", tip: "Tip Calculator", cur: "Currency Converter",
+            other: "Other Elite Tools", 
+            footer: "SmartHelper.io provides precision tools for health and finance. Our BMI calculator uses the standard WHO formula to help you monitor your physical condition accurately. All data is processed locally on your device to ensure your private health information remains secure.",
+            seo: `<h2>Why Check Your BMI?</h2><p>Body Mass Index is a key indicator used by health professionals to categorize weight-related health risks. Monitoring it helps in maintaining a balanced lifestyle.</p><h2>Accuracy Matters</h2><p>Our tool provides instant feedback based on your height and weight inputs with high precision.</p>`,
+            unit: "Unit Converter", perc: "Percentage", vat: "VAT Calc", loan: "Loan Calc", 
+            disc: "Discount", tip: "Tip Calc", cur: "Currency Converter",
             privacy: "Privacy Policy", terms: "Terms of Use",
             s1: "Underweight", s2: "Normal weight", s3: "Overweight", s4: "Obesity",
-            privText: "<h2>Privacy</h2><p>Data stays on your device.</p>",
-            termsText: "<h2>Terms</h2><p>For educational purposes only. Consult a doctor.</p>"
+            privText: "<h2>Privacy</h2><p>We do not store or track your health data. All calculations are performed instantly in your browser.</p>",
+            termsText: "<h2>Terms</h2><p>The BMI result is for informational purposes only. Please consult a medical professional for health advice.</p>"
         },
         uk: {
+            desc: "Професійний калькулятор ІМТ - миттєво аналізуйте свою вагу та індекс маси тіла для контролю здоров'я.",
             weight: "Вага (кг):", height: "Зріст (см):", bmiRes: "Ваш ІМТ:",
-            other: "Інші інструменти", footer: "ІМТ Калькулятор — перевірте свій індекс маси тіла.",
-            unit: "Конвертер", perc: "Відсотки", vat: "Калькулятор ПДВ", loan: "Кредити", 
+            other: "Інші професійні інструменти", 
+            footer: "SmartHelper.io надає точні інструменти для здоров'я та фінансів. Наш калькулятор ІМТ використовує стандартну формулу ВООЗ, щоб допомогти вам точно контролювати свій фізичний стан. Усі дані обробляються локально на вашому пристрої, щоб ваші особисті дані залишалися в безпеці.",
+            seo: `<h2>Навіщо перевіряти ІМТ?</h2><p>Індекс маси тіла є ключовим показником, який використовується фахівцями для оцінки ризиків для здоров’я. Його моніторинг допомагає підтримувати збалансований спосіб життя.</p><h2>Точність понад усе</h2><p>Наш інструмент забезпечує миттєвий результат на основі вашого зросту та ваги з високою точністю.</p>`,
+            unit: "Конвертер", perc: "Відсотки", vat: "ПДВ", loan: "Кредити", 
             disc: "Знижки", tip: "Чайові", cur: "Курси валют",
             privacy: "Конфіденційність", terms: "Умови",
             s1: "Недостатня вага", s2: "Норма", s3: "Зайва вага", s4: "Ожиріння",
-            privText: "<h2>Конфіденційність</h2><p>Дані не зберігаються.</p>",
-            termsText: "<h2>Умови</h2><p>Тільки для ознайомлення. Зверніться до лікаря.</p>"
+            privText: "<h2>Конфіденційність</h2><p>Ми не зберігаємо ваші дані. Розрахунки відбуваються у вашому браузері.</p>",
+            termsText: "<h2>Умови</h2><p>Результат ІМТ має ознайомчий характер. Зверніться до лікаря для медичної консультації.</p>"
         },
         es: {
+            desc: "Calculadora de IMC profesional: analice su peso e índice de masa corporal al instante para una vida saludable.",
             weight: "Peso (kg):", height: "Altura (cm):", bmiRes: "Tu IMC:",
-            other: "Herramientas", footer: "Calculadora IMC — revisa tu índice de masa corporal.",
-            unit: "Convertidor", perc: "Porcentajes", vat: "IVA", loan: "Préstamos", 
+            other: "Otras herramientas", 
+            footer: "SmartHelper.io ofrece herramientas de precisión para la salud y las finanzas. Nuestra calculadora de IMC utiliza la fórmula estándar de la OMS para ayudarle a controlar su estado físico de forma precisa. Todos los datos se procesan localmente en su dispositivo.",
+            seo: `<h2>¿Por qué revisar su IMC?</h2><p>El índice de masa corporal es un indicador clave para categorizar los riesgos de salud. Mantener un IMC saludable mejora la calidad de vida.</p>`,
+            unit: "Unidades", perc: "Porcentaje", vat: "IVA", loan: "Préstamos", 
             disc: "Descuento", tip: "Propina", cur: "Moneda",
             privacy: "Privacidad", terms: "Términos",
             s1: "Bajo peso", s2: "Normal", s3: "Sobrepeso", s4: "Obesidad",
-            privText: "<h2>Privacidad</h2><p>Sin almacenamiento.</p>",
-            termsText: "<h2>Términos</h2><p>Uso informativo.</p>"
+            privText: "<h2>Privacidad</h2><p>No guardamos sus datos de salud.</p>",
+            termsText: "<h2>Términos</h2><p>El resultado es solo para fines informativos.</p>"
         },
         de: {
+            desc: "Professioneller BMI-Rechner - analysieren Sie Ihr Gewicht und Ihren Body-Mass-Index sofort für Ihre Gesundheit.",
             weight: "Gewicht (kg):", height: "Größe (cm):", bmiRes: "Ihr BMI:",
-            other: "Andere Tools", footer: "BMI-Rechner — prüfen Sie Ihren Body-Mass-Index.",
-            unit: "Konverter", perc: "Prozente", vat: "MwSt", loan: "Kredit", 
+            other: "Andere Elite-Tools", 
+            footer: "SmartHelper.io bietet Präzisionswerkzeuge für Gesundheit und Finanzen. Unser BMI-Rechner verwendet die Standard-WHO-Formel, um Ihren körperlichen Zustand genau zu überwachen. Alle Daten werden lokal auf Ihrem Gerät verarbeitet.",
+            seo: `<h2>Warum den BMI prüfen?</h2><p>Der Body-Mass-Index ist ein wichtiger Indikator zur Einstufung gesundheitlicher Risiken. Monitoring hilft bei einem gesunden Lebensstil.</p>`,
+            unit: "Konverter", perc: "Prozent", vat: "MwSt", loan: "Kredit", 
             disc: "Rabatt", tip: "Trinkgeld", cur: "Währung",
             privacy: "Datenschutz", terms: "AGB",
             s1: "Untergewicht", s2: "Normalgewicht", s3: "Übergewicht", s4: "Adipositas",
-            privText: "<h2>Datenschutz</h2><p>Keine Speicherung.</p>",
-            termsText: "<h2>AGB</h2><p>Nur zur Information.</p>"
+            privText: "<h2>Datenschutz</h2><p>Ihre Daten bleiben auf Ihrem Gerät.</p>",
+            termsText: "<h2>AGB</h2><p>Der BMI-Wert dient nur zur Information.</p>"
         }
     };
 
@@ -146,7 +175,9 @@
     }
 
     function updateUI() {
-        const t = translations[curLang];
+        const t = translations[curLang] || translations.en;
+        document.documentElement.lang = curLang;
+        document.getElementById('meta-desc').content = t.desc;
         document.getElementById('langSelect').value = curLang;
         document.getElementById('lbl-weight').innerText = t.weight;
         document.getElementById('lbl-height').innerText = t.height;
@@ -155,21 +186,19 @@
         document.getElementById('footer-text').innerText = t.footer;
         document.getElementById('link-privacy').innerText = t.privacy;
         document.getElementById('link-terms').innerText = t.terms;
+        document.getElementById('seo-box').innerHTML = t.seo;
         
-        document.getElementById('lnk-unit').innerText = t.unit;
-        document.getElementById('lnk-perc').innerText = t.perc;
-        document.getElementById('lnk-vat').innerText = t.vat;
-        document.getElementById('lnk-loan').innerText = t.loan;
-        document.getElementById('lnk-disc').innerText = t.disc;
-        document.getElementById('lnk-tip').innerText = t.tip;
-        document.getElementById('lnk-cur').innerText = t.cur;
+        ['unit', 'perc', 'vat', 'loan', 'disc', 'tip', 'cur'].forEach(id => {
+            const el = document.getElementById('lnk-' + id);
+            if(el) el.innerText = t[id];
+        });
         calculate();
     }
 
     function calculate() {
         const w = parseFloat(document.getElementById('weight').value) || 0;
         const h = parseFloat(document.getElementById('height').value) / 100 || 0;
-        const t = translations[curLang];
+        const t = translations[curLang] || translations.en;
         
         if (w > 0 && h > 0) {
             const bmi = w / (h * h);
@@ -177,18 +206,22 @@
             const s = document.getElementById('bmiStatus');
             s.style.display = 'block';
             if (bmi < 18.5) { s.innerText = t.s1; s.style.color = '#38bdf8'; }
-            else if (bmi < 25) { s.innerText = t.s2; s.style.color = '#22c55e'; }
+            else if (bmi < 25) { s.innerText = t.s2; s.style.color = '#4ade80'; }
             else if (bmi < 30) { s.innerText = t.s3; s.style.color = '#fbbf24'; }
             else { s.innerText = t.s4; s.style.color = '#ef4444'; }
+        } else {
+            document.getElementById('bmiValue').value = '';
+            document.getElementById('bmiStatus').style.display = 'none';
         }
     }
 
     function openPol(type) {
-        const t = translations[curLang];
+        const t = translations[curLang] || translations.en;
         document.getElementById('modalBody').innerHTML = type === 'privacy' ? t.privText : t.termsText;
         document.getElementById('siteModal').style.display = 'block';
     }
     function closeModal() { document.getElementById('siteModal').style.display = 'none'; }
+    
     updateUI();
 </script>
 </body>
